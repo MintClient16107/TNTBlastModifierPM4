@@ -10,6 +10,7 @@ use pocketmine\math\AxisAlignedBB;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\ClosureTask;
 use pocketmine\utils\Config;
+use pocketmine\world\Position;
 
 class Main extends PluginBase implements Listener {
 	/** @var Config */
@@ -32,25 +33,24 @@ class Main extends PluginBase implements Listener {
 	 * @ignoreCancelled true
 	 */
 	public function onExplode(ExplosionPrimeEvent $ev): void {
-		$level = $ev->getEntity()->getWorld();
+		$level = $ev->getEntity()->getPosition();
 		$this->getScheduler()->scheduleTask(new ClosureTask(function () use ($ev, $level): void {
-			$src = $ev->getEntity();
 			$explosionSize = $ev->getForce() * 2;
-			$minX = (int)floor($src->x - $explosionSize - 1);
-			$maxX = (int)ceil($src->x + $explosionSize + 1);
-			$minY = (int)floor($src->y - $explosionSize - 1);
-			$maxY = (int)ceil($src->y + $explosionSize + 1);
-			$minZ = (int)floor($src->z - $explosionSize - 1);
-			$maxZ = (int)ceil($src->z + $explosionSize + 1);
+			$minX = (int)floor($ev->getEntity()->x - $explosionSize - 1);
+			$maxX = (int)ceil($ev->getEntity()->x + $explosionSize + 1);
+			$minY = (int)floor($ev->getEntity()->y - $explosionSize - 1);
+			$maxY = (int)ceil($ev->getEntity()->y + $explosionSize + 1);
+			$minZ = (int)floor($ev->getEntity()->z - $explosionSize - 1);
+			$maxZ = (int)ceil($ev->getEntity()->z + $explosionSize + 1);
 
 			$explosionBB = new AxisAlignedBB($minX, $minY, $minZ, $maxX, $maxY, $maxZ);
 
-			$list = $level->getNearbyEntities($explosionBB, $src);
+			$list = $level->getNearbyEntities($explosionBB, $ev->getEntity());
 			foreach($list as $entity) {
-				$distance = $entity->distance($src) / $explosionSize;
+				$distance = $entity->distance($ev->getEntity()) / $explosionSize;
 
 				if($distance <= 1) {
-					$motion = $entity->subtract($src)->normalize();
+					$motion = $entity->subtract($ev->getEntity())->normalize();
 					$impact = (1 - $distance) * ($exposure = 1);
 
 					$entity->setMotion($motion->multiply($impact)->multiply($this->factor));
