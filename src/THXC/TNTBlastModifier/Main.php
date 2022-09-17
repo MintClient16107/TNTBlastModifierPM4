@@ -33,15 +33,15 @@ class Main extends PluginBase implements Listener {
 	 * @ignoreCancelled true
 	 */
 	public function onExplode(ExplosionPrimeEvent $ev): void {
-		$level = $ev->getEntity()->getWorld();
+		$level = $ev->getEntity()->getPosition();
 		$this->getScheduler()->scheduleTask(new ClosureTask(function () use ($ev, $level): void {
 			$explosionSize = $ev->getForce() * 2;
 			$minX = (int)floor($ev->getEntity()->getPosition()->getX() - $explosionSize - 1);
 			$maxX = (int)ceil($ev->getEntity()->getPosition()->getX() + $explosionSize + 1);
-			$minY = (int)floor($ev->getEntity()->getPosition()->getX() - $explosionSize - 1);
-			$maxY = (int)ceil($ev->getEntity()->getPosition()->getX() + $explosionSize + 1);
-			$minZ = (int)floor($ev->getEntity()->getPosition()->getX() - $explosionSize - 1);
-			$maxZ = (int)ceil($ev->getEntity()->getPosition()->getX() + $explosionSize + 1);
+			$minY = (int)floor($ev->getEntity()->getPosition()->getY() - $explosionSize - 1);
+			$maxY = (int)ceil($ev->getEntity()->getPosition()->getY() + $explosionSize + 1);
+			$minZ = (int)floor($ev->getEntity()->getPosition()->getZ() - $explosionSize - 1);
+			$maxZ = (int)ceil($ev->getEntity()->getPosition()->getZ() + $explosionSize + 1);
 
 			$explosionBB = new AxisAlignedBB($minX, $minY, $minZ, $maxX, $maxY, $maxZ);
 
