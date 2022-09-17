@@ -32,8 +32,8 @@ class Main extends PluginBase implements Listener {
 	 * @ignoreCancelled true
 	 */
 	public function onExplode(ExplosionPrimeEvent $ev): void {
-		$level = $ev->getEntity()->getLevel();
-		$this->getScheduler()->scheduleTask(new ClosureTask(function (int $_) use ($ev, $level): void {
+		$level = $ev->getEntity()->getWorld();
+		$this->getScheduler()->scheduleTask(new ClosureTask(function () use ($ev, $level): void {
 			$src = $ev->getEntity();
 			$explosionSize = $ev->getForce() * 2;
 			$minX = (int)floor($src->x - $explosionSize - 1);
