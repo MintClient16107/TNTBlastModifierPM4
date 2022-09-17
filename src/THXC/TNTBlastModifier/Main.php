@@ -36,12 +36,12 @@ class Main extends PluginBase implements Listener {
 		$level = $ev->getEntity()->getPosition();
 		$this->getScheduler()->scheduleTask(new ClosureTask(function () use ($ev, $level): void {
 			$explosionSize = $ev->getForce() * 2;
-			$minX = (int)floor($ev->getEntity()->x - $explosionSize - 1);
-			$maxX = (int)ceil($ev->getEntity()->x + $explosionSize + 1);
-			$minY = (int)floor($ev->getEntity()->y - $explosionSize - 1);
-			$maxY = (int)ceil($ev->getEntity()->y + $explosionSize + 1);
-			$minZ = (int)floor($ev->getEntity()->z - $explosionSize - 1);
-			$maxZ = (int)ceil($ev->getEntity()->z + $explosionSize + 1);
+			$minX = (int)floor($ev->getEntity()->getPosition()->getX() - $explosionSize - 1);
+			$maxX = (int)ceil($ev->getEntity()->getPosition()->getX() + $explosionSize + 1);
+			$minY = (int)floor($ev->getEntity()->getPosition()->getX() - $explosionSize - 1);
+			$maxY = (int)ceil($ev->getEntity()->getPosition()->getX() + $explosionSize + 1);
+			$minZ = (int)floor($ev->getEntity()->getPosition()->getX() - $explosionSize - 1);
+			$maxZ = (int)ceil($ev->getEntity()->getPosition()->getX() + $explosionSize + 1);
 
 			$explosionBB = new AxisAlignedBB($minX, $minY, $minZ, $maxX, $maxY, $maxZ);
 
