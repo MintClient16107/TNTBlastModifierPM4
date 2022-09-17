@@ -33,7 +33,7 @@ class Main extends PluginBase implements Listener {
 	 * @ignoreCancelled true
 	 */
 	public function onExplode(ExplosionPrimeEvent $ev): void {
-		$level = $ev->getEntity()->getWorld();
+		$level = $ev->getEntity()->getPosition();
 		$this->getScheduler()->scheduleTask(new ClosureTask(function () use ($ev, $level): void {
 			$explosionSize = $ev->getForce() * 2;
 			$minX = (int)floor($ev->getEntity()->getPosition()->getX() - $explosionSize - 1);
@@ -47,7 +47,7 @@ class Main extends PluginBase implements Listener {
 
 			$list = $level->getNearbyEntities($explosionBB, $ev->getEntity());
 			foreach($list as $entity) {
-				$distance = $entity->distance($ev->getEntity()) / $explosionSize;
+				$distance = $entity->getPosition()->distance($ev->getEntity()) / $explosionSize;
 
 				if($distance <= 1) {
 					$motion = $entity->subtract($ev->getEntity())->normalize();
